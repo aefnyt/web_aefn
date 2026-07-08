@@ -88,89 +88,116 @@ interface GitHubFile {
  * Lee un archivo JSON del repositorio y lo devuelve como objeto.
  * Si el archivo no existe, devuelve null.
  *
- * Incluye un FALLBACK a archivos locales en public/ para desarrollo:
- * Si la API de GitHub falla (token placeholder o sin conexión), intenta
- * leer el archivo desde el sistema de archivos local. Esto permite probar
- * la UI sin necesidad de un token real configurado.
+ * Estrategia de lectura (en orden):
+ * 1. GitHub API (si GITHUB_TOKEN está configurado) — datos más frescos
+ * 2. Archivo local (fs.readFile) — fallback para desarrollo
+ * 3. Fetch desde URL estática (VERCEL_URL) — fallback para producción en Vercel
  *
  * @param path - Ruta del archivo dentro del repo, ej: "data/profesores.json"
  */
 export async function readJsonFile<T>(path: string): Promise<{ data: T | null; sha: string | null }> {
   const token = getGithubToken();
 
-  // Si no hay token configurado, ir directo al fallback local
-  if (!token) {
-    console.warn(
-      `[github.ts] GITHUB_TOKEN no configurado. Usando fallback local para: ${path}`
-    );
-    return await readLocalJsonFile<T>(path);
-  }
+  // 1. Intentar GitHub API si hay token
+  if (token) {
+    try {
+      const url = `${API_BASE}/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${path}?ref=${GITHUB_CONFIG.branch}`;
+      const response = await fetch(url, {
+        headers: githubHeaders(token),
+        method: "GET",
+      });
 
-  const url = `${API_BASE}/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${path}?ref=${GITHUB_CONFIG.branch}`;
-
-  try {
-    const response = await fetch(url, {
-      headers: githubHeaders(token),
-      method: "GET",
-    });
-
-    // 404 = el archivo no existe todavía (es válido, devolvemos null)
-    if (response.status === 404) {
-      return { data: null, sha: null };
-    }
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      // Si es 401 (Bad credentials), intentar fallback a archivo local
-      if (response.status === 401) {
-        console.warn(
-          `[github.ts] Token inválido. Intentando fallback local para: ${path}`
-        );
+      if (response.status === 404) {
+        // El archivo no existe en GitHub, intentar fallback local
+        console.warn(`[github.ts] 404 en GitHub para: ${path}. Intentando fallback.`);
         return await readLocalJsonFile<T>(path);
       }
-      throw new Error(
-        `GitHub API: error al leer ${path} (HTTP ${response.status}): ${errorText}`
-      );
+
+      if (response.ok) {
+        const fileData = await response.json();
+        const content = Buffer.from(fileData.content, "base64").toString("utf-8");
+        const parsed = JSON.parse(content) as T;
+        return { data: parsed, sha: fileData.sha as string };
+      }
+
+      // Si es 401 u otro error, logear y caer al fallback
+      const errorText = await response.text();
+      console.warn(`[github.ts] GitHub API error ${response.status} para ${path}: ${errorText.substring(0, 200)}`);
+    } catch (error) {
+      console.warn(`[github.ts] Error leyendo de GitHub: ${path}`, error instanceof Error ? error.message : error);
     }
-
-    const fileData = await response.json();
-
-    // El contenido viene en base64. Lo decodificamos.
-    const content = Buffer.from(fileData.content, "base64").toString("utf-8");
-    const parsed = JSON.parse(content) as T;
-
-    return { data: parsed, sha: fileData.sha as string };
-  } catch (error) {
-    // Si el error es de red o el token es inválido, intentar fallback local
-    if (error instanceof Error && (error.message.includes("Bad credentials") || error.message.includes("401"))) {
-      console.warn(`[github.ts] Fallback local para: ${path}`);
-      return await readLocalJsonFile<T>(path);
-    }
-    throw error;
+  } else {
+    console.warn(`[github.ts] GITHUB_TOKEN no configurado. Usando fallback para: ${path}`);
   }
+
+  // 2. Fallback: archivo local
+  const localResult = await readLocalJsonFile<T>(path);
+  if (localResult.data !== null) {
+    return localResult;
+  }
+
+  // 3. Fallback final: fetch desde URL estática (Vercel sirve public/ estáticamente)
+  console.warn(`[github.ts] Fallback local falló para: ${path}. Intentando fetch estático.`);
+  return await readStaticJsonFile<T>(path);
 }
 
 /**
  * Lee un archivo JSON desde el sistema de archivos local (public/).
- * Es un fallback para desarrollo cuando no hay token de GitHub configurado.
- *
- * 📚 Concepto: File System API (Node.js)
- * Node.js puede leer archivos del sistema de archivos con fs.readFile.
- * En Next.js, process.cwd() devuelve el directorio raíz del proyecto.
- * Así podemos leer public/data/profesores.json directamente del disco.
- *
- * IMPORTANTE: Esto NO funciona en Vercel (producción) porque ahí no hay
- * sistema de archivos persistente. Por eso es solo un fallback de desarrollo.
+ * Intenta múltiples rutas posibles (para compatibilidad con Vercel standalone).
  */
 async function readLocalJsonFile<T>(path: string): Promise<{ data: T | null; sha: string | null }> {
+  const fs = await import("fs/promises");
+  const pathModule = await import("path");
+
+  // Múltiples rutas posibles (Vercel standalone puede tener diferentes estructuras)
+  const possiblePaths = [
+    `${process.cwd()}/public/${path}`,
+    `${process.cwd()}/./public/${path}`,
+    pathModule.join(process.cwd(), "public", path),
+  ];
+
+  for (const localPath of possiblePaths) {
+    try {
+      const content = await fs.readFile(localPath, "utf-8");
+      const parsed = JSON.parse(content) as T;
+      return { data: parsed, sha: null };
+    } catch {
+      // Intentar siguiente ruta
+    }
+  }
+
+  return { data: null, sha: null };
+}
+
+/**
+ * Lee un archivo JSON desde la URL estática (Vercel sirve public/ en /).
+ * Este es el fallback más confiable en producción.
+ */
+async function readStaticJsonFile<T>(path: string): Promise<{ data: T | null; sha: string | null }> {
   try {
-    const fs = await import("fs/promises");
-    const localPath = `${process.cwd()}/public/${path}`;
-    const content = await fs.readFile(localPath, "utf-8");
+    // Construir URL base según el entorno
+    let baseUrl: string;
+    if (process.env.VERCEL_URL) {
+      baseUrl = `https://${process.env.VERCEL_URL}`;
+    } else if (process.env.NODE_ENV === "production") {
+      baseUrl = `https://${process.env.HOST || "localhost"}`;
+    } else {
+      baseUrl = "http://localhost:3000";
+    }
+
+    const url = `${baseUrl}/${path}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      console.warn(`[github.ts] Fetch estático falló: ${url} (HTTP ${response.status})`);
+      return { data: null, sha: null };
+    }
+
+    const content = await response.text();
     const parsed = JSON.parse(content) as T;
-    return { data: parsed, sha: null }; // sha=null: los writes fallarán (esperado en dev sin token)
-  } catch {
-    // Archivo local no existe
+    return { data: parsed, sha: null };
+  } catch (error) {
+    console.warn(`[github.ts] Fetch estático error:`, error instanceof Error ? error.message : error);
     return { data: null, sha: null };
   }
 }
