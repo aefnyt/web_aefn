@@ -181,13 +181,13 @@ export default function GruposAdminPage() {
 
   // Cargar pestañas al activarlas por primera vez (lazy load)
   useEffect(() => {
-    if (mounted && isAuthenticated && activeTab === "papers" && !papersLoaded) {
+    if (shouldRender && activeTab === "papers" && !papersLoaded) {
       loadPapers();
     }
-    if (mounted && isAuthenticated && activeTab === "tesis" && !tesisLoaded) {
+    if (shouldRender && activeTab === "tesis" && !tesisLoaded) {
       loadTesis();
     }
-  }, [mounted, isAuthenticated, activeTab, papersLoaded, tesisLoaded, loadPapers, loadTesis]);
+  }, [shouldRender, activeTab, papersLoaded, tesisLoaded, loadPapers, loadTesis]);
 
   // === Protección de ruta ===
   // ====================================================================
