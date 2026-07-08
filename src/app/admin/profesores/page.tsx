@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { useAdminAuth, getStoredKey } from "@/hooks/use-admin-auth";
+import { getStoredKey } from "@/hooks/use-admin-auth";
+import { useAdminRedirect } from "@/hooks/use-admin-redirect";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, RefreshCw } from "lucide-react";
@@ -33,8 +33,7 @@ import { AdminModuleHeader } from "@/components/admin/admin-module-header";
  */
 
 export default function ProfesoresAdminPage() {
-  const router = useRouter();
-  const { isAuthenticated, mounted } = useAdminAuth();
+    const { shouldRender } = useAdminRedirect();
 
   const [profesores, setProfesores] = useState<Profesor[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -76,24 +75,10 @@ export default function ProfesoresAdminPage() {
   }, []);
 
   useEffect(() => {
-    if (mounted && isAuthenticated) {
+    if (shouldRender) {
       loadProfesores();
     }
-  }, [mounted, isAuthenticated, loadProfesores]);
-
-  // === Protección de ruta ===
-  if (!mounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="text-slate-400 text-sm">Cargando...</div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    router.push("/admin");
-    return null;
-  }
+  }, [shouldRender, loadProfesores]);
 
   // === Handlers ===
 
@@ -172,6 +157,13 @@ export default function ProfesoresAdminPage() {
   const accessKey = getStoredKey();
 
   // === Render ===
+  if (!shouldRender) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-neutral-950">
+        <div className="text-amber-400/60 text-sm">Cargando...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50">

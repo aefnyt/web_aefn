@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { useAdminAuth, getStoredKey } from "@/hooks/use-admin-auth";
+import { getStoredKey } from "@/hooks/use-admin-auth";
+import { useAdminRedirect } from "@/hooks/use-admin-redirect";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, RefreshCw } from "lucide-react";
@@ -20,8 +20,7 @@ import { AdminModuleHeader } from "@/components/admin/admin-module-header";
  */
 
 export default function NoticiasAdminPage() {
-  const router = useRouter();
-  const { isAuthenticated, mounted } = useAdminAuth();
+    const { shouldRender } = useAdminRedirect();
 
   const [noticias, setNoticias] = useState<Noticia[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,23 +54,10 @@ export default function NoticiasAdminPage() {
   }, []);
 
   useEffect(() => {
-    if (mounted && isAuthenticated) {
+    if (shouldRender) {
       loadNoticias();
     }
-  }, [mounted, isAuthenticated, loadNoticias]);
-
-  if (!mounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="text-slate-400 text-sm">Cargando...</div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    router.push("/admin");
-    return null;
-  }
+  }, [shouldRender, loadNoticias]);
 
   function handleAdd() {
     setFormMode("create");
@@ -159,6 +145,13 @@ export default function NoticiasAdminPage() {
   }
 
   const accessKey = getStoredKey();
+  if (!shouldRender) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-neutral-950">
+        <div className="text-amber-400/60 text-sm">Cargando...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50">

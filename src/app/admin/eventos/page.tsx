@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { useAdminAuth, getStoredKey } from "@/hooks/use-admin-auth";
+import { getStoredKey } from "@/hooks/use-admin-auth";
+import { useAdminRedirect } from "@/hooks/use-admin-redirect";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, RefreshCw } from "lucide-react";
@@ -26,8 +26,7 @@ import { AdminModuleHeader } from "@/components/admin/admin-module-header";
  */
 
 export default function EventosAdminPage() {
-  const router = useRouter();
-  const { isAuthenticated, mounted } = useAdminAuth();
+    const { shouldRender } = useAdminRedirect();
 
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -74,24 +73,10 @@ export default function EventosAdminPage() {
   }, []);
 
   useEffect(() => {
-    if (mounted && isAuthenticated) {
+    if (shouldRender) {
       loadEventos();
     }
-  }, [mounted, isAuthenticated, loadEventos]);
-
-  // === Protección de ruta ===
-  if (!mounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="text-slate-400 text-sm">Cargando...</div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    router.push("/admin");
-    return null;
-  }
+  }, [shouldRender, loadEventos]);
 
   // === Handlers ===
 
@@ -170,6 +155,13 @@ export default function EventosAdminPage() {
   const accessKey = getStoredKey();
 
   // === Render ===
+  if (!shouldRender) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-neutral-950">
+        <div className="text-amber-400/60 text-sm">Cargando...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50">
