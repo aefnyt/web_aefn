@@ -79,6 +79,17 @@ export async function POST(request: NextRequest) {
     const { data: clubes, sha } = await readJsonFile<Club[]>(JSON_PATH);
     const lista = clubes ?? [];
 
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (clubes === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
+
     // 4. Generar ID único (slug del nombre + sufijo si hay colisión)
     const baseId = slugify(nuevoClub.nombre);
     let id = baseId;
@@ -156,6 +167,17 @@ export async function PUT(request: NextRequest) {
     const { data: clubes, sha } = await readJsonFile<Club[]>(JSON_PATH);
     const lista = clubes ?? [];
 
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (clubes === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
+
     const index = lista.findIndex((c) => c.id === id);
     if (index === -1) {
       return NextResponse.json(
@@ -223,6 +245,17 @@ export async function DELETE(request: NextRequest) {
 
     const { data: clubes, sha } = await readJsonFile<Club[]>(JSON_PATH);
     const lista = clubes ?? [];
+
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (clubes === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
 
     const index = lista.findIndex((c) => c.id === id);
     if (index === -1) {

@@ -82,6 +82,17 @@ export async function POST(request: NextRequest) {
     const { data: tesis, sha } = await readJsonFile<Tesis[]>(JSON_PATH);
     const lista = tesis ?? [];
 
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (tesis === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
+
     // 4. Validar que no exista una tesis con el mismo título
     if (lista.some((t) => t.title === nuevaTesis.title)) {
       return NextResponse.json(
@@ -154,6 +165,17 @@ export async function PUT(request: NextRequest) {
 
     const { data: tesisList, sha } = await readJsonFile<Tesis[]>(JSON_PATH);
     const lista = tesisList ?? [];
+
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (tesisList === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
 
     const index = lista.findIndex((t) => t.title === oldTitle);
     if (index === -1) {
@@ -228,6 +250,17 @@ export async function DELETE(request: NextRequest) {
 
     const { data: tesisList, sha } = await readJsonFile<Tesis[]>(JSON_PATH);
     const lista = tesisList ?? [];
+
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (tesisList === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
 
     const index = lista.findIndex((t) => t.title === title);
     if (index === -1) {

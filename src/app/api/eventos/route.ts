@@ -92,6 +92,17 @@ export async function POST(request: NextRequest) {
     const { data: eventos, sha } = await readJsonFile<Evento[]>(JSON_PATH);
     const lista = eventos ?? [];
 
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (eventos === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
+
     // 4. Generar ID único (slug del título + primeros 10 chars de la fecha)
     const baseId = generateEventId(nuevoEvento.titulo, nuevoEvento.fecha);
     let id = baseId;
@@ -172,6 +183,17 @@ export async function PUT(request: NextRequest) {
     const { data: eventos, sha } = await readJsonFile<Evento[]>(JSON_PATH);
     const lista = eventos ?? [];
 
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (eventos === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
+
     const index = lista.findIndex((e) => e.id === id);
     if (index === -1) {
       return NextResponse.json(
@@ -237,6 +259,17 @@ export async function DELETE(request: NextRequest) {
 
     const { data: eventos, sha } = await readJsonFile<Evento[]>(JSON_PATH);
     const lista = eventos ?? [];
+
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (eventos === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
 
     const index = lista.findIndex((e) => e.id === id);
     if (index === -1) {

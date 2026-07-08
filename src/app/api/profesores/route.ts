@@ -35,6 +35,7 @@ const JSON_PATH = MODULES[MODULE_KEY].jsonPath;
 export async function GET() {
   try {
     const { data, sha } = await readJsonFile<Profesor[]>(JSON_PATH);
+    console.log(`[api/profesores GET] data length: ${data?.length ?? "null"}, sha: ${sha ? "yes" : "null"}`);
     return NextResponse.json({
       data: data ?? [],
       sha,
@@ -81,6 +82,29 @@ export async function POST(request: NextRequest) {
     // 3. Leer JSON actual
     const { data: profesores, sha } = await readJsonFile<Profesor[]>(JSON_PATH);
     const lista = profesores ?? [];
+
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (profesores === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
+
+    // SAFEGUARD: Si la lectura falló (data es null), NO continuar con el write
+    // porque sobrescribiría el archivo con solo el profesor nuevo, borrando los existentes.
+    if (profesores === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los profesores existentes. Por favor, recarga la página e inténtalo de nuevo. Si el problema persiste, verifica que el GITHUB_TOKEN esté configurado correctamente en Vercel.",
+        },
+        { status: 500 }
+      );
+    }
 
     // 4. Generar ID único (slug del nombre + sufijo si hay colisión)
     const baseId = slugify(nuevoProfesor.nombre);
@@ -160,6 +184,17 @@ export async function PUT(request: NextRequest) {
     const { data: profesores, sha } = await readJsonFile<Profesor[]>(JSON_PATH);
     const lista = profesores ?? [];
 
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (profesores === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
+
     const index = lista.findIndex((p) => p.id === id);
     if (index === -1) {
       return NextResponse.json(
@@ -226,6 +261,17 @@ export async function DELETE(request: NextRequest) {
 
     const { data: profesores, sha } = await readJsonFile<Profesor[]>(JSON_PATH);
     const lista = profesores ?? [];
+
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (profesores === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
 
     const index = lista.findIndex((p) => p.id === id);
     if (index === -1) {

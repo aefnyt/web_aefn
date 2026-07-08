@@ -80,6 +80,17 @@ export async function POST(request: NextRequest) {
     const { data: papers, sha } = await readJsonFile<Paper[]>(JSON_PATH);
     const lista = papers ?? [];
 
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (papers === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
+
     // 4. Validar que no exista un paper con el mismo título
     if (lista.some((p) => p.title === nuevoPaper.title)) {
       return NextResponse.json(
@@ -153,6 +164,17 @@ export async function PUT(request: NextRequest) {
 
     const { data: papers, sha } = await readJsonFile<Paper[]>(JSON_PATH);
     const lista = papers ?? [];
+
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (papers === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
 
     const index = lista.findIndex((p) => p.title === oldTitle);
     if (index === -1) {
@@ -228,6 +250,17 @@ export async function DELETE(request: NextRequest) {
 
     const { data: papers, sha } = await readJsonFile<Paper[]>(JSON_PATH);
     const lista = papers ?? [];
+
+    // SAFEGUARD: Si la lectura falló, NO sobrescribir
+    if (papers === null) {
+      return NextResponse.json(
+        {
+          error:
+            "No se pudieron leer los datos existentes. Recarga la página e inténtalo de nuevo.",
+        },
+        { status: 500 }
+      );
+    }
 
     const index = lista.findIndex((p) => p.title === title);
     if (index === -1) {
