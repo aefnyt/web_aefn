@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Eventos</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>Test de Eventos</h1>
+    <div id="output"></div>
+    
+    <script>
+        fetch('data/events.json')
+            .then(resp => resp.json())
+            .then(data => {
+                const output = document.getElementById('output');
+                output.innerHTML = `<p>✓ JSON Cargado: ${data.length} eventos</p>`;
+                
+                // Parsear como lo hace el calendario
+                const eventsData = data.map(ev => {
+                    const fecha = ev.fecha;
+                    const fechaParte = fecha.split('T')[0];
+                    const horaParte = fecha.split('T')[1]?.substring(0, 5) || '';
+                    
+                    return {
+                        id: ev.id,
+                        title: ev.titulo,
+                        fecha: fechaParte,
+                        hora: horaParte,
+                        tipo: ev.tipo || 'otro',
+                        ubicacion: ev.ubicacion || '',
+                        description: ev.descripcion || '',
+                        estado: ev.estado || 'proximo'
+                    };
+                });
+                
+                output.innerHTML += `<p>✓ Eventos parseados: ${eventsData.length}</p>`;
+                
+                // Verificar eventos de septiembre
+                const septiembre = eventsData.filter(e => e.fecha.startsWith('2025-09-'));
+                output.innerHTML += `<p>✓ Eventos en Septiembre: ${septiembre.length}</p>`;
+                
+                // Mostrar primer evento
+                if (eventsData.length > 0) {
+                    const first = eventsData[0];
+                    output.innerHTML += `<p>Primer evento: <strong>${first.title}</strong></p>`;
+                    output.innerHTML += `<p>Fecha: ${first.fecha} ${first.hora}</p>`;
+                    output.innerHTML += `<p>Tipo: ${first.tipo}</p>`;
+                    output.innerHTML += `<p>Ubicación: ${first.ubicacion}</p>`;
+                }
+                
+                // Mostrar todos los eventos
+                output.innerHTML += '<h2>Todos los eventos:</h2>';
+                output.innerHTML += '<ul>';
+                eventsData.forEach(e => {
+                    output.innerHTML += `<li>${e.fecha} - ${e.title} (${e.tipo})</li>`;
+                });
+                output.innerHTML += '</ul>';
+            })
+            .catch(err => {
+                document.getElementById('output').innerHTML = `<p>Error: ${err}</p>`;
+            });
+    </script>
+</body>
+</html>

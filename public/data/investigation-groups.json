@@ -1,0 +1,36 @@
+[
+  {
+    "id": "nano-materials",
+    "title": "Nanomateriales y Caracterización",
+    "slug": "nanomateriales-y-caracterizacion",
+    "short_description": "Síntesis y caracterización de materiales nanoestructurados para aplicaciones en energía y biomedicina.",
+    "image": "images/topics/undraw_hardware_store_vx5n.png",
+    "participants": [
+      {"name": "Dra. Clara Rojas", "role": "Coordinadora"},
+      {"name": "Ing. Miguel Suárez", "role": "Investigador"},
+      {"name": "Ana Pérez", "role": "Estudiante"}
+    ],
+    "long_description": "Este grupo trabaja en la síntesis, funcionalización y caracterización de nanoestructuras para aplicaciones en almacenamiento de energía y biosensores. Se combinan técnicas experimentales y modelado computacional.",
+    "projects": [
+      {"title": "Nanocompuestos para baterías de alta densidad", "year": 2024},
+      {"title": "Biosensores basados en nanopartículas", "year": 2025}
+    ],
+    "contact_email": "nanomaterials@aefn.local"
+  },
+  {
+    "id": "quantum-systems",
+    "title": "Sistemas Cuánticos y Computación",
+    "slug": "sistemas-cuanticos-y-computacion",
+    "short_description": "Investigación en sistemas cuánticos, simulaciones y técnicas instrumentales de física moderna.",
+    "image": "images/topics/undraw_quantum_physics_re_ow29.png",
+    "participants": [
+      {"name": "Dr. Werner Bramer", "role": "Coordinador"},
+      {"name": "Luis García", "role": "Estudiante"}
+    ],
+    "long_description": "Líneas de trabajo en teoría y experimentos de sistemas cuánticos, incluyendo modelado numérico y desarrollo de instrumentación para caracterización de materiales cuánticos.",
+    "projects": [
+      {"title": "Simulaciones de redes cuánticas", "year": 2025}
+    ],
+    "contact_email": "quantum@aefn.local"
+  }
+]

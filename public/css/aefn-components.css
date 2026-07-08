@@ -1,0 +1,262 @@
+/* Efectos de hover y animaciones */
+.custom-block {
+    transition: all 0.3s ease;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.custom-block:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Estilos para tarjetas de profesores */
+.professor-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.professor-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.professor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Estilos para clubes */
+.club-section {
+    position: relative;
+    padding: 2rem;
+    background: var(--light-color);
+}
+
+.club-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    border-left: 5px solid var(--secondary-color);
+}
+
+.club-logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin: 1rem;
+}
+
+/* Estilos para el sistema de login */
+.login-section {
+    background: var(--gradient-primary);
+    padding: 3rem 0;
+}
+
+.login-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Estilos para el repositorio */
+.repository-section {
+    background: var(--light-color);
+}
+
+.material-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--info-color);
+}
+
+/* Calendario de eventos */
+.calendar-event {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--accent-color);
+}
+
+/* Badges personalizados */
+.badge-year {
+    background: var(--tertiary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+}
+
+.badge-subject {
+    background: var(--secondary-color);
+    color: var(--dark-color);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+}
+
+/* Efectos de hover para enlaces */
+.hover-effect {
+    transition: all 0.3s ease;
+}
+
+.hover-effect:hover {
+    color: var(--secondary-color);
+    transform: translateX(5px);
+}
+
+/* Estilos para logos */
+.logo-container {
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.logo-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Animaciones de entrada */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Personalización de formularios */
+.custom-form input,
+.custom-form textarea {
+    border: 2px solid var(--light-color);
+    border-radius: 8px;
+    padding: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.custom-form input:focus,
+.custom-form textarea:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+}
+
+/* Botones de acción */
+.action-button {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Estilos para áreas restringidas */
+.restricted-area {
+    position: relative;
+    background: var(--light-color);
+    padding: 2rem;
+    border-radius: 10px;
+    border: 2px dashed var(--primary-color);
+}
+
+.restricted-area::before {
+    content: '🔒';
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+}
+
+/* Botón "Agregar Entrada" - Mejorado */
+.btn-add-entry {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 1rem 2.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-add-entry:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    color: white;
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.btn-add-entry:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+.btn-add-entry i {
+    font-size: 1.3rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+.btn-add-entry span {
+    display: inline;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.add-entry-container {
+    padding: 2rem 0;
+    animation: slideInDown 0.5s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Media queries para responsive */
+@media (max-width: 768px) {
+    .btn-add-entry {
+        padding: 0.9rem 1.8rem;
+        font-size: 1rem;
+    }
+    
+    .btn-add-entry span {
+        display: none;
+    }
+}

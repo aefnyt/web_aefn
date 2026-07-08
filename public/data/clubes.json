@@ -1,0 +1,98 @@
+[
+  {
+    "id": "astronomia",
+    "nombre": "Club de Astronomía",
+    "icono": "bi-stars",
+    "descripcion": "Explora el universo y sus misterios con nosotros. Realizamos observaciones nocturnas, charlas sobre astronomía y participamos en eventos científicos.",
+    "descripcion_larga": "El Club de Astronomía es un espacio dedicado a la exploración del cosmos. Realizamos observaciones telescópicas, charlas educativas sobre fenómenos astrofísicos, y participamos en eventos de divulgación científica. Todos los estudiantes interesados en el universo son bienvenidos.",
+    "directiva": [
+      {
+        "cargo": "Presidente",
+        "nombre": "[Nombre]",
+        "email": "[Email]"
+      },
+      {
+        "cargo": "Vicepresidente",
+        "nombre": "[Nombre]",
+        "email": "[Email]"
+      },
+      {
+        "cargo": "Secretario",
+        "nombre": "[Nombre]",
+        "email": "[Email]"
+      }
+    ],
+    "actividades": [
+      {
+        "fecha": "[Fecha]",
+        "titulo": "[Actividad]",
+        "descripcion": "[Descripción]"
+      }
+    ],
+    "contacto_email": "club-astronomia@aefn.local"
+  },
+  {
+    "id": "programacion-cientifica",
+    "nombre": "Club de Programación Científica",
+    "icono": "bi-code-square",
+    "descripcion": "Aprende a utilizar herramientas computacionales para la física y la nanotecnología. Python, MATLAB, y más.",
+    "descripcion_larga": "Desarrollamos habilidades en programación científica utilizando lenguajes como Python, MATLAB, Julia y C++. Nos enfocamos en simulaciones, análisis de datos y modelado computacional aplicado a la física y nanotecnología.",
+    "directiva": [
+      {
+        "cargo": "Presidente",
+        "nombre": "[Nombre]",
+        "email": "[Email]"
+      },
+      {
+        "cargo": "Vicepresidente",
+        "nombre": "[Nombre]",
+        "email": "[Email]"
+      },
+      {
+        "cargo": "Secretario",
+        "nombre": "[Nombre]",
+        "email": "[Email]"
+      }
+    ],
+    "actividades": [
+      {
+        "fecha": "[Fecha]",
+        "titulo": "[Actividad]",
+        "descripcion": "[Descripción]"
+      }
+    ],
+    "contacto_email": "club-programacion@aefn.local"
+  },
+  {
+    "id": "investigacion",
+    "nombre": "Club de Investigación",
+    "icono": "bi-microscope",
+    "descripcion": "Participa en proyectos de investigación, aprende metodologías y desarrolla tus propias ideas científicas.",
+    "descripcion_larga": "Somos un espacio de colaboración para estudiantes interesados en investigación. Participamos en proyectos experimentales, seminarios de metodología científica, y fomentamos la generación de nuevas ideas. Trabajamos en colaboración con profesores investigadores.",
+    "directiva": [
+      {
+        "cargo": "Presidente",
+        "nombre": "[Nombre]",
+        "email": "[Email]"
+      },
+      {
+        "cargo": "Vicepresidente",
+        "nombre": "[Nombre]",
+        "email": "[Email]"
+      },
+      {
+        "cargo": "Secretario",
+        "nombre": "[Nombre]",
+        "email": "[Email]"
+      }
+    ],
+    "actividades": [
+      {
+        "fecha": "[Fecha]",
+        "titulo": "[Actividad]",
+        "descripcion": "[Descripción]"
+      }
+    ],
+    "contacto_email": "club-investigacion@aefn.local"
+  }
+]
