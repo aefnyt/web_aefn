@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readJsonFile, writeJsonFile } from "@/lib/github";
+import { readJsonFile, writeJsonFile, readJsonForWrite } from "@/lib/github";
 import { hasPermission, extractKeyFromRequest } from "@/lib/auth";
 import type { Paper } from "@/lib/types";
 
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 3. Leer JSON actual
-    const { data: papers, sha } = await readJsonFile<Paper[]>(JSON_PATH);
+    const { data: papers, sha } = await readJsonForWrite<Paper[]>(JSON_PATH, "title");
     const lista = papers ?? [];
 
     // SAFEGUARD: Si la lectura falló, NO sobrescribir
@@ -162,7 +162,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const { data: papers, sha } = await readJsonFile<Paper[]>(JSON_PATH);
+    const { data: papers, sha } = await readJsonForWrite<Paper[]>(JSON_PATH, "title");
     const lista = papers ?? [];
 
     // SAFEGUARD: Si la lectura falló, NO sobrescribir
@@ -248,7 +248,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Falta el campo: title." }, { status: 400 });
     }
 
-    const { data: papers, sha } = await readJsonFile<Paper[]>(JSON_PATH);
+    const { data: papers, sha } = await readJsonForWrite<Paper[]>(JSON_PATH, "title");
     const lista = papers ?? [];
 
     // SAFEGUARD: Si la lectura falló, NO sobrescribir

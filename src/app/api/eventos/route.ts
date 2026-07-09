@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readJsonFile, writeJsonFile, slugify } from "@/lib/github";
+import { readJsonFile, writeJsonFile, slugify, readJsonForWrite } from "@/lib/github";
 import { hasPermission, extractKeyFromRequest } from "@/lib/auth";
 import { MODULES } from "@/lib/config";
 import type { Evento } from "@/lib/types";
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 3. Leer JSON actual
-    const { data: eventos, sha } = await readJsonFile<Evento[]>(JSON_PATH);
+    const { data: eventos, sha } = await readJsonForWrite<Evento[]>(JSON_PATH, "id");
     const lista = eventos ?? [];
 
     // SAFEGUARD: Si la lectura falló, NO sobrescribir
@@ -180,7 +180,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const { data: eventos, sha } = await readJsonFile<Evento[]>(JSON_PATH);
+    const { data: eventos, sha } = await readJsonForWrite<Evento[]>(JSON_PATH, "id");
     const lista = eventos ?? [];
 
     // SAFEGUARD: Si la lectura falló, NO sobrescribir
@@ -257,7 +257,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Falta el campo: id." }, { status: 400 });
     }
 
-    const { data: eventos, sha } = await readJsonFile<Evento[]>(JSON_PATH);
+    const { data: eventos, sha } = await readJsonForWrite<Evento[]>(JSON_PATH, "id");
     const lista = eventos ?? [];
 
     // SAFEGUARD: Si la lectura falló, NO sobrescribir

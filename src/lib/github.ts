@@ -88,17 +88,24 @@ interface GitHubFile {
  * Lee un archivo JSON del repositorio y lo devuelve como objeto.
  * Si el archivo no existe, devuelve null.
  *
- * Estrategia de lectura (en orden):
- * 1. GitHub API (si GITHUB_TOKEN está configurado) — datos más frescos
- * 2. Archivo local (fs.readFile) — fallback para desarrollo
- * 3. Fetch desde URL estática (VERCEL_URL) — fallback para producción en Vercel
+ * Estrategia de lectura con MERGE INTELIGENTE:
+ * 1. Intenta todas las fuentes (GitHub API, archivo local, fetch estático)
+ * 2. Devuelve la fuente con MÁS datos (para evitar pérdida de datos)
+ * 3. El SHA viene de GitHub (necesario para writes)
+ *
+ * Esto previene el bug donde un POST sobrescribe el JSON con menos datos
+ * de los que realmente existen.
  *
  * @param path - Ruta del archivo dentro del repo, ej: "data/profesores.json"
  */
 export async function readJsonFile<T>(path: string): Promise<{ data: T | null; sha: string | null }> {
   const token = getGithubToken();
 
-  // 1. Intentar GitHub API si hay token
+  let githubData: T | null = null;
+  let githubSha: string | null = null;
+  let localData: T | null = null;
+
+  // 1. Intentar GitHub API (para obtener datos + SHA)
   if (token) {
     try {
       const url = `${API_BASE}/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${path}?ref=${GITHUB_CONFIG.branch}`;
@@ -107,38 +114,160 @@ export async function readJsonFile<T>(path: string): Promise<{ data: T | null; s
         method: "GET",
       });
 
-      if (response.status === 404) {
-        // El archivo no existe en GitHub, intentar fallback local
-        console.warn(`[github.ts] 404 en GitHub para: ${path}. Intentando fallback.`);
-        return await readLocalJsonFile<T>(path);
-      }
-
       if (response.ok) {
         const fileData = await response.json();
         const content = Buffer.from(fileData.content, "base64").toString("utf-8");
-        const parsed = JSON.parse(content) as T;
-        return { data: parsed, sha: fileData.sha as string };
+        githubData = JSON.parse(content) as T;
+        githubSha = fileData.sha as string;
+      } else if (response.status !== 404) {
+        const errorText = await response.text();
+        console.warn(`[github.ts] GitHub API error ${response.status} para ${path}: ${errorText.substring(0, 200)}`);
       }
-
-      // Si es 401 u otro error, logear y caer al fallback
-      const errorText = await response.text();
-      console.warn(`[github.ts] GitHub API error ${response.status} para ${path}: ${errorText.substring(0, 200)}`);
     } catch (error) {
       console.warn(`[github.ts] Error leyendo de GitHub: ${path}`, error instanceof Error ? error.message : error);
     }
-  } else {
-    console.warn(`[github.ts] GITHUB_TOKEN no configurado. Usando fallback para: ${path}`);
   }
 
-  // 2. Fallback: archivo local
-  const localResult = await readLocalJsonFile<T>(path);
-  if (localResult.data !== null) {
-    return localResult;
+  // 2. Intentar archivo local
+  localData = (await readLocalJsonFile<T>(path)).data;
+
+  // 3. MERGE INTELIGENTE: devolver la fuente con MÁS datos
+  // Esto previene pérdida de datos si GitHub tiene una versión vieja/incompleta
+  const githubCount = Array.isArray(githubData) ? githubData.length : githubData ? 1 : 0;
+  const localCount = Array.isArray(localData) ? localData.length : localData ? 1 : 0;
+
+  console.log(`[github.ts] ${path}: GitHub=${githubCount} items, Local=${localCount} items`);
+
+  if (githubData && localData) {
+    // Ambas fuentes tienen datos: devolver la que tenga MÁS
+    if (githubCount >= localCount) {
+      return { data: githubData, sha: githubSha };
+    } else {
+      // Local tiene más datos que GitHub (GitHub está incompleto)
+      // Devolver local pero SIN sha (los writes fallarán, lo cual es seguro)
+      console.warn(`[github.ts] Local tiene más datos (${localCount}) que GitHub (${githubCount}). Usando local.`);
+      return { data: localData, sha: null };
+    }
   }
 
-  // 3. Fallback final: fetch desde URL estática (Vercel sirve public/ estáticamente)
-  console.warn(`[github.ts] Fallback local falló para: ${path}. Intentando fetch estático.`);
+  if (githubData) {
+    return { data: githubData, sha: githubSha };
+  }
+
+  if (localData) {
+    return { data: localData, sha: null };
+  }
+
+  // 4. Último recurso: fetch estático
+  console.warn(`[github.ts] GitHub y local fallaron. Intentando fetch estático.`);
   return await readStaticJsonFile<T>(path);
+}
+
+/**
+ * Lee un archivo JSON para ESCRITURA: combina datos de GitHub y local,
+ * fusionándolos para evitar pérdida de datos.
+ *
+ * Esta función está diseñada específicamente para operaciones POST/PUT/DELETE.
+ * Devuelve:
+ * - data: el array fusionado (GitHub + local, sin duplicados)
+ * - sha: el SHA de GitHub (si se obtuvo), necesario para el write
+ *
+ * Si GitHub tiene menos items que local, los fusiona (añade los de local que no estén en GitHub).
+ *
+ * @param path - Ruta del archivo
+ * @param idField - Campo usado para detectar duplicados (ej: "id", "nombre", "title")
+ */
+export async function readJsonForWrite<T>(
+  path: string,
+  idField: string = "id"
+): Promise<{ data: T[] | null; sha: string | null }> {
+  // 1. Leer de GitHub (para obtener SHA + datos de GitHub)
+  const githubResult = await readJsonFromGithubOnly<T[]>(path);
+  // 2. Leer de local (para obtener datos completos)
+  const localResult = await readLocalJsonFile<T[]>(path);
+
+  const githubData = githubResult.data;
+  const localData = localResult.data;
+  const sha = githubResult.sha;
+
+  // Si ambos son null, no hay datos
+  if (!githubData && !localData) {
+    return { data: null, sha: null };
+  }
+
+  // Si solo hay de GitHub, usarlo
+  if (githubData && !localData) {
+    return { data: githubData, sha };
+  }
+
+  // Si solo hay local, usarlo (sin SHA, los writes fallarán)
+  if (!githubData && localData) {
+    return { data: localData, sha: null };
+  }
+
+  // Ambos existen: FUSIONAR
+  const merged = [...githubData!];
+  for (const localItem of localData!) {
+    const localIdValue = (localItem as Record<string, unknown>)[idField];
+    const existe = merged.some((m) => {
+      const mIdValue = (m as Record<string, unknown>)[idField];
+      // Comparar por idField, o por nombre/title si idField no existe
+      if (localIdValue && mIdValue) {
+        return localIdValue === mIdValue;
+      }
+      // Fallback: comparar por campos comunes
+      const localName = (localItem as Record<string, unknown>).nombre ||
+        (localItem as Record<string, unknown>).title ||
+        (localItem as Record<string, unknown>).album;
+      const mName = (m as Record<string, unknown>).nombre ||
+        (m as Record<string, unknown>).title ||
+        (m as Record<string, unknown>).album;
+      return localName && mName && localName === mName;
+    });
+    if (!existe) {
+      merged.push(localItem);
+    }
+  }
+
+  console.log(`[github.ts] readJsonForWrite ${path}: GitHub=${githubData!.length}, Local=${localData!.length}, Merged=${merged.length}`);
+  return { data: merged, sha };
+}
+
+/**
+ * Lee un archivo JSON SOLO desde GitHub API (ignora fallbacks locales).
+ * Útil cuando necesitas el SHA real de GitHub para hacer un write,
+ * incluso si readJsonFile devolvió datos del archivo local.
+ *
+ * @param path - Ruta del archivo dentro del repo
+ */
+export async function readJsonFromGithubOnly<T>(path: string): Promise<{ data: T | null; sha: string | null }> {
+  const token = getGithubToken();
+  if (!token) {
+    return { data: null, sha: null };
+  }
+
+  try {
+    const url = `${API_BASE}/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${path}?ref=${GITHUB_CONFIG.branch}`;
+    const response = await fetch(url, {
+      headers: githubHeaders(token),
+      method: "GET",
+    });
+
+    if (response.status === 404) {
+      return { data: null, sha: null };
+    }
+
+    if (!response.ok) {
+      return { data: null, sha: null };
+    }
+
+    const fileData = await response.json();
+    const content = Buffer.from(fileData.content, "base64").toString("utf-8");
+    const parsed = JSON.parse(content) as T;
+    return { data: parsed, sha: fileData.sha as string };
+  } catch {
+    return { data: null, sha: null };
+  }
 }
 
 /**

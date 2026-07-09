@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readJsonFile, writeJsonFile, slugify } from "@/lib/github";
+import { readJsonFile, writeJsonFile, slugify, readJsonForWrite } from "@/lib/github";
 import { hasPermission, extractKeyFromRequest } from "@/lib/auth";
 import { MODULES } from "@/lib/config";
 import type { GrupoInvestigacion } from "@/lib/types";
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 3. Leer JSON actual
-    const { data: grupos, sha } = await readJsonFile<GrupoInvestigacion[]>(JSON_PATH);
+    const { data: grupos, sha } = await readJsonForWrite<GrupoInvestigacion[]>(JSON_PATH, "id");
     const lista = grupos ?? [];
 
     // SAFEGUARD: Si la lectura falló, NO sobrescribir
@@ -161,7 +161,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const { data: grupos, sha } = await readJsonFile<GrupoInvestigacion[]>(JSON_PATH);
+    const { data: grupos, sha } = await readJsonForWrite<GrupoInvestigacion[]>(JSON_PATH, "id");
     const lista = grupos ?? [];
 
     // SAFEGUARD: Si la lectura falló, NO sobrescribir
@@ -241,7 +241,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Falta el campo: id." }, { status: 400 });
     }
 
-    const { data: grupos, sha } = await readJsonFile<GrupoInvestigacion[]>(JSON_PATH);
+    const { data: grupos, sha } = await readJsonForWrite<GrupoInvestigacion[]>(JSON_PATH, "id");
     const lista = grupos ?? [];
 
     // SAFEGUARD: Si la lectura falló, NO sobrescribir
