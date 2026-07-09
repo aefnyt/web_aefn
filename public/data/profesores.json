@@ -168,5 +168,25 @@
       "github": ""
     },
     "id": "gema"
+  },
+  {
+    "nombre": "Andrey Mereshchenko",
+    "titulo": "profe",
+    "area": [],
+    "areas_investigacion": [],
+    "foto": "",
+    "email": "",
+    "telefono": "",
+    "oficina": "",
+    "bio": "",
+    "educacion": [],
+    "publicaciones": [],
+    "proyectos": [],
+    "social": {
+      "linkedin": "",
+      "google_scholar": "",
+      "github": ""
+    },
+    "id": "andrey-mereshchenko"
   }
 ]
