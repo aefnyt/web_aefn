@@ -4,11 +4,16 @@
     "titulo": "Estudiante de Física gana premio nacional de investigación",
     "resumen": "María Gómez, estudiante de quinto ciclo, obtuvo el primer lugar en el concurso nacional de investigación con su trabajo sobre materiales cuánticos.",
     "contenido": "## ¡Felicitaciones María!\n\nMaría Gómez, estudiante de **quinto ciclo de Física**, ha obtenido el **primer lugar** en el Concurso Nacional de Investigación Estudiantil organizado por la SENESCYT.\n\n### Sobre el proyecto\n\nSu trabajo, titulado *\"Síntesis y caracterización de nanomateriales para aplicaciones energéticas\"*, fue desarrollado bajo la dirección del Dr. Duncan Mowbray en los laboratorios de la ECFN.\n\n### Lo que dijo María\n\n> \"Este logro no hubiera sido posible sin el apoyo de mis profesores y compañeros. Espero que esto inspire a más estudiantes a involucrarse en la investigación.\"\n\n### Próximos pasos\n\nMaría representará a Ecuador en el Congreso Internacional de Física en México el próximo mes.\n\n¡Felicidades María! 🎉",
-    "imagen": "",
+    "imagen": "images/noticias/2025-01-15-estudiante-gana-premio-nacional-fisica.webp",
     "fecha": "2025-01-15",
     "autor": "AEFN",
     "categoria": "logro-estudiantes",
-    "etiquetas": ["premio", "estudiantes", "investigacion", "nacional"],
+    "etiquetas": [
+      "premio",
+      "estudiantes",
+      "investigacion",
+      "nacional"
+    ],
     "destacada": true,
     "publicada": true,
     "creadaEn": "2025-01-15T10:00:00Z",
@@ -23,7 +28,11 @@
     "fecha": "2025-01-10",
     "autor": "AEFN",
     "categoria": "convocatoria-becas",
-    "etiquetas": ["becas", "intercambio", "2025"],
+    "etiquetas": [
+      "becas",
+      "intercambio",
+      "2025"
+    ],
     "destacada": false,
     "publicada": true,
     "creadaEn": "2025-01-10T09:00:00Z",
@@ -38,7 +47,11 @@
     "fecha": "2025-01-08",
     "autor": "AEFN",
     "categoria": "publicacion-cientifica",
-    "etiquetas": ["profesores", "publicacion", "nature"],
+    "etiquetas": [
+      "profesores",
+      "publicacion",
+      "nature"
+    ],
     "destacada": false,
     "publicada": true,
     "creadaEn": "2025-01-08T14:00:00Z",
@@ -53,7 +66,11 @@
     "fecha": "2025-01-05",
     "autor": "AEFN",
     "categoria": "convocatoria-vinculacion",
-    "etiquetas": ["vinculacion", "proyectos", "financiamiento"],
+    "etiquetas": [
+      "vinculacion",
+      "proyectos",
+      "financiamiento"
+    ],
     "destacada": false,
     "publicada": true,
     "creadaEn": "2025-01-05T11:00:00Z",
