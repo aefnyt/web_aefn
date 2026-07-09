@@ -24,13 +24,13 @@
    * Cargar datos de galería desde JSON
    */
   function loadGalleryData() {
-    fetch('data/gallery.json')
+    fetch('/api/galeria')
       .then(resp => {
         if (!resp.ok) throw new Error('No se pudo cargar la galería');
         return resp.json();
       })
-      .then(data => {
-        allAlbums = data;
+      .then(response => {
+        allAlbums = response.data || [];
         renderFilters();
         renderGallery();
       })

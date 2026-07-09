@@ -195,7 +195,22 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const index = lista.findIndex((p) => p.id === id);
+    // Buscar por id, o por nombre si no tiene id (profesores originales sin id)
+    let index = lista.findIndex((p) => p.id === id);
+    if (index === -1) {
+      // Fallback: buscar por nombre (para profesores originales que no tienen id)
+      // El id temporal tiene formato "temp-N-{slug-del-nombre}"
+      // Extraer el nombre del id temporal
+      const tempMatch = id.match(/^temp-\d+-(.+)$/);
+      if (tempMatch) {
+        const slugFromId = tempMatch[1];
+        index = lista.findIndex((p) => {
+          if (p.id) return false; // ya tiene id real, no matchear
+          const pSlug = slugify(p.nombre);
+          return pSlug === slugFromId || pSlug.startsWith(slugFromId.slice(0, 20));
+        });
+      }
+    }
     if (index === -1) {
       return NextResponse.json(
         { error: `No se encontró profesor con id "${id}".` },
@@ -203,8 +218,8 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Mantener el id y la foto (la foto se gestiona en endpoint separado)
-    profesor.id = id;
+    // Asignar id real (si el profesor original no tenía, ahora tendrá uno permanente)
+    profesor.id = id.startsWith("temp-") ? slugify(profesor.nombre) : id;
     if (!profesor.foto) profesor.foto = lista[index].foto;
 
     lista[index] = profesor;
@@ -273,7 +288,19 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const index = lista.findIndex((p) => p.id === id);
+    // Buscar por id, o por nombre si no tiene id (profesores originales sin id)
+    let index = lista.findIndex((p) => p.id === id);
+    if (index === -1) {
+      const tempMatch = id.match(/^temp-\d+-(.+)$/);
+      if (tempMatch) {
+        const slugFromId = tempMatch[1];
+        index = lista.findIndex((p) => {
+          if (p.id) return false;
+          const pSlug = slugify(p.nombre);
+          return pSlug === slugFromId || pSlug.startsWith(slugFromId.slice(0, 20));
+        });
+      }
+    }
     if (index === -1) {
       return NextResponse.json(
         { error: `No se encontró profesor con id "${id}".` },

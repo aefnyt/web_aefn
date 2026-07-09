@@ -6,9 +6,18 @@
     return await res.json();
   }
 
-  async function fetchGroups(){ return await fetchJSON('data/investigation-groups.json'); }
-  async function fetchTheses(){ return await fetchJSON('data/theses.json'); }
-  async function fetchPapers(){ return await fetchJSON('data/papers.json'); }
+  async function fetchGroups(){
+    const r = await fetchJSON('/api/grupos');
+    return r.data || [];
+  }
+  async function fetchTheses(){
+    const r = await fetchJSON('/api/tesis');
+    return r.data || [];
+  }
+  async function fetchPapers(){
+    const r = await fetchJSON('/api/papers');
+    return r.data || [];
+  }
 
   function createCard(group){
     const col = document.createElement('div');

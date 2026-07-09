@@ -95,7 +95,8 @@
     if (!container) return;
 
     try {
-      const clubes = await fetchJSON('data/clubes.json');
+      const response = await fetchJSON('/api/clubes');
+      const clubes = response.data || [];
       const row = document.createElement('div');
       row.className = 'row';
 

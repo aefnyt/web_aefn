@@ -138,7 +138,8 @@
     if (!container) return;
 
     try {
-      const eventos = await fetchJSON('data/events.json');
+      const response = await fetchJSON('/api/eventos');
+      const eventos = response.data || [];
       
       if (!eventos || eventos.length === 0) {
         container.innerHTML = '<div class="col-12"><p class="text-muted text-center">No hay eventos registrados.</p></div>';

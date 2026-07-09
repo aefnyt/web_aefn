@@ -12,14 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let profesores = [];
 
-    // Cargar datos desde el archivo JSON
-    fetch('data/profesores.json')
+    // Cargar datos desde la API (siempre datos frescos de GitHub)
+    fetch('/api/profesores')
         .then(res => {
             if (!res.ok) throw new Error('No se pudo cargar el archivo');
             return res.json();
         })
-        .then(data => {
-            profesores = data;
+        .then(response => {
+            profesores = response.data || [];
             renderGrid(profesores);
         })
         .catch(err => {
