@@ -1,8 +1,10 @@
 [
   {
-    "nombre": "Gema Gonzáles, Ph.D",
+    "nombre": "Gema Gonzáles",
     "titulo": "Decana de la Escuela de Ciencias Físicas y Nanotecnología",
-    "area": ["nanotecnologia"],
+    "area": [
+      "nanotecnologia"
+    ],
     "areas_investigacion": [
       "Sintesis de Materiales",
       "Caracterización de Materiales",
@@ -30,12 +32,16 @@
       "linkedin": "https://ec.linkedin.com/in/gema-gonzalez-5823321b2",
       "google_scholar": "https://scholar.google.com/citations?user=9QikXzcAAAAJ&hl=en",
       "github": ""
-    }
+    },
+    "id": "gema-gonzales"
   },
   {
     "nombre": "Wladimir Banda, Ph.D",
     "titulo": "Coordinador de la Maestría en Física Fundamental",
-    "area": ["astronomia","computacion"],
+    "area": [
+      "astronomia",
+      "computacion"
+    ],
     "areas_investigacion": [
       "Magnetohydrodynamics",
       "Astrophysical gas dynamics",
@@ -65,10 +71,12 @@
       "github": "https://github.com/wbandabarragan"
     }
   },
-   {
+  {
     "nombre": "Eduardo Estévez, Ph.D",
     "titulo": "Coordinador de la Maestría en Estrategias para la Docencia STEM",
-    "area": ["nanotecnologia"],
+    "area": [
+      "nanotecnologia"
+    ],
     "areas_investigacion": [
       "Magnetohydrodynamics",
       "Astrophysical gas dynamics"
@@ -79,14 +87,11 @@
     "oficina": "Edificio Senescyt, ECFN",
     "bio": "Investigadora líder en nanotecnología con enfoque en desarrollo de nuevos materiales para aplicaciones energéticas.",
     "educacion": [
-
-        "Maestría en Proyectos de Energías Renovables - Universidad Europea Miguel de Cervantes",
-        "Ingenieria en Finanzas - Pontificia Universidad Católica del Ecuador",
-        "Licenciatura en Física-Matemática - Universidad Técnica Particular de Loja"
+      "Maestría en Proyectos de Energías Renovables - Universidad Europea Miguel de Cervantes",
+      "Ingenieria en Finanzas - Pontificia Universidad Católica del Ecuador",
+      "Licenciatura en Física-Matemática - Universidad Técnica Particular de Loja"
     ],
-    "publicaciones": [
-      
-    ],
+    "publicaciones": [],
     "proyectos": [
       "",
       ""
@@ -97,10 +102,12 @@
       "github": ""
     }
   },
-   {
+  {
     "nombre": "Duncan Mowbray, Ph.D",
     "titulo": "Profesor Principal",
-    "area": ["nanotecnologia"],
+    "area": [
+      "nanotecnologia"
+    ],
     "areas_investigacion": [
       "Theory development, modeling,  and simulation of nanomaterials",
       "Nanoelectronics"
@@ -111,31 +118,29 @@
     "oficina": "Edificio Senescyt, ECFN",
     "bio": "Investigadora líder en nanotecnología con enfoque en desarrollo de nuevos materiales para aplicaciones energéticas.",
     "educacion": [
-
-        "Doctorate of Philosophy in Applied Mathematics - University of Waterloo",
-        "Master of Science in Physics - University of Waterloo",
-        "Bachelor of Mathematic in Honours Applied Mathematics - University of Waterloo",
-        "Bachelor of Science in Honours Physics - University of Waterloo"
+      "Doctorate of Philosophy in Applied Mathematics - University of Waterloo",
+      "Master of Science in Physics - University of Waterloo",
+      "Bachelor of Mathematic in Honours Applied Mathematics - University of Waterloo",
+      "Bachelor of Science in Honours Physics - University of Waterloo"
     ],
     "publicaciones": [
-        "Direct Imaging of Covalent Bond Structure in Single-Molecule Reactions (2013)",
-        "Trends in CO Oxidation Rates for Metal Nanoparticles and Close-Packed, Stepped, and Kinked Surfaces (2009)",
-        "Influence of functional groups on charge transport in molecular junctions (2008)"
-      
+      "Direct Imaging of Covalent Bond Structure in Single-Molecule Reactions (2013)",
+      "Trends in CO Oxidation Rates for Metal Nanoparticles and Close-Packed, Stepped, and Kinked Surfaces (2009)",
+      "Influence of functional groups on charge transport in molecular junctions (2008)"
     ],
-    "proyectos": [
-      
-    ],
+    "proyectos": [],
     "social": {
       "linkedin": "https://ec.linkedin.com/in/duncan-mowbray-95345424",
       "google_scholar": "https://scholar.google.com/citations?user=H8utUhwAAAAJ&hl=en",
       "github": ""
     }
   },
-   {
+  {
     "nombre": "Henry P.Pinto, Ph.D",
     "titulo": "Profesor Principal",
-    "area": ["nanotecnologia"],
+    "area": [
+      "nanotecnologia"
+    ],
     "areas_investigacion": [
       "Study of metal clusters/TiO2(110) interfaces",
       "Computational studies of flower-like defects in graphene",
@@ -147,14 +152,12 @@
     "oficina": "Edificio Senescyt, ECFN",
     "bio": "Investigadora líder en nanotecnología con enfoque en desarrollo de nuevos materiales para aplicaciones energéticas.",
     "educacion": [
-
-        "PhD in Condensed Matter Physics and Quantum Mechanical simulations - University of Ireland"
+      "PhD in Condensed Matter Physics and Quantum Mechanical simulations - University of Ireland"
     ],
     "publicaciones": [
-        "Ab–initio study on γ–Al2O3 surfaces (2004)",
-        "The short-range nature of the Verwey transition in Fe3O4: band structure and Jahn-Teller distortion (2006)",
-        "Detailed scanning probe microscopy tip models determined from simultaneous atom-resolved AFM and STM studies of the TiO2(110) surface (2008)"
-      
+      "Ab–initio study on γ–Al2O3 surfaces (2004)",
+      "The short-range nature of the Verwey transition in Fe3O4: band structure and Jahn-Teller distortion (2006)",
+      "Detailed scanning probe microscopy tip models determined from simultaneous atom-resolved AFM and STM studies of the TiO2(110) surface (2008)"
     ],
     "proyectos": [
       "",
