@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta name="description" content="Galería de fotos de AEFN">
+        <meta name="author" content="AEFN">
+
+        <title>Galería - AEFN</title>
+
+        <!-- CSS FILES -->        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap-icons.css" rel="stylesheet">
+        <link href="css/templatemo-topic-listing.css" rel="stylesheet">
+        <link href="css/aefn-theme.css" rel="stylesheet">
+        <link href="css/aefn-components.css" rel="stylesheet">
+        <link href="css/aefn-overrides.css" rel="stylesheet">
+        <link href="css/aefn-color-override.css" rel="stylesheet">
+        <style>
+            .gallery-filter-btn {
+                margin: 5px;
+                transition: all 0.3s ease;
+            }
+            .gallery-filter-btn.active {
+                background-color: var(--primary-color) !important;
+                color: white !important;
+                border-color: var(--primary-color) !important;
+            }
+            .gallery-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+                margin-top: 30px;
+            }
+            .gallery-item {
+                position: relative;
+                overflow: hidden;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .gallery-item:hover {
+                transform: scale(1.05);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            }
+            .gallery-item img {
+                width: 100%;
+                height: 250px;
+                object-fit: cover;
+                display: block;
+            }
+            .gallery-item-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+            .gallery-item:hover .gallery-item-overlay {
+                opacity: 1;
+            }
+            .gallery-item-overlay i {
+                font-size: 2rem;
+                color: white;
+            }
+            .gallery-item-title {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.5), transparent);
+                padding: 15px 10px 10px;
+                color: white;
+                font-size: 0.95rem;
+                font-weight: 600;
+                z-index: 10;
+            }
+            .album-title {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+                padding: 20px 10px 10px;
+                color: white;
+                font-size: 0.9rem;
+                font-weight: 600;
+            }
+            .lightbox {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                z-index: 9999;
+                align-items: center;
+                justify-content: center;
+            }
+            .lightbox.active {
+                display: flex;
+            }
+            .lightbox-content {
+                position: relative;
+                max-width: 90%;
+                max-height: 90vh;
+                display: flex;
+                gap: 30px;
+                align-items: flex-start;
+            }
+            .lightbox-image {
+                max-width: 100%;
+                max-height: 85vh;
+                object-fit: contain;
+            }
+            .lightbox-close {
+                position: absolute;
+                top: 20px;
+                right: 30px;
+                color: white;
+                font-size: 2rem;
+                cursor: pointer;
+                z-index: 10000;
+            }
+            .lightbox-nav {
+                position: fixed;
+                top: 50%;
+                transform: translateY(-50%);
+                color: white;
+                font-size: 2.5rem;
+                cursor: pointer;
+                padding: 15px 20px;
+                background: rgba(102, 126, 234, 0.8);
+                border-radius: 50%;
+                transition: all 0.3s ease;
+                z-index: 10001;
+                width: 50px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                user-select: none;
+            }
+            .lightbox-nav:hover {
+                background: rgba(102, 126, 234, 1);
+                transform: translateY(-50%) scale(1.1);
+                box-shadow: 0 5px 20px rgba(102, 126, 234, 0.6);
+            }
+            .lightbox-prev {
+                left: 30px;
+            }
+            .lightbox-next {
+                right: 30px;
+            }
+            .lightbox-info {
+                color: white;
+                text-align: center;
+                margin-top: 20px;
+                font-size: 0.9rem;
+            }
+            .no-photos {
+                text-align: center;
+                padding: 40px;
+                color: #999;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <main>
+            <nav class="navbar navbar-expand-lg">
+                <div class="container">
+                    <a class="navbar-brand" href="index.html">
+                        <i class="bi-atom"></i>
+                        <span>AEFN</span>
+                    </a>
+
+                    <div class="d-lg-none ms-auto me-4">
+                        <!-- profile icon removed -->
+                    </div>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-lg-5 me-lg-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="index.html">Inicio</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/noticias">Noticias</a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="nosotros.html">Nosotros</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="profesores.html">Profesores</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="clubes.html">Clubes</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="investigacion.html">Investigación</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="calendario.html">Calendario</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link active" href="galeria.html">Galería</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Recursos</a>
+                                <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="resourcesDropdown">
+                                    <li><a class="dropdown-item" href="https://drive.google.com/drive/folders/1qMnYS6zYltRx96gtm2YVGF_hamFiRC0d?usp=drive_link" target="_blank" rel="noopener noreferrer">Material de Estudio</a></li>
+                                    <li><a class="dropdown-item" href="https://www.vinculacion-ecfn.com/" target="_blank" rel="noopener noreferrer">Vinculación</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <!-- profile icon removed -->
+                    </div>
+                </div>
+            </nav>
+
+            <header class="hero-section d-flex justify-content-center align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 col-12 mx-auto">
+                            <h1 class="text-white text-center">Galería AEFN</h1>
+                            <h6 class="text-center">Revive los mejores momentos de nuestras actividades</h6>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="section-padding">
+                <div class="container">
+                    <!-- Filtros de Álbumes -->
+                    <div class="text-center mb-5">
+                        <h5 class="mb-3">Filtrar por Álbum</h5>
+                        <div id="albumFilters" class="d-flex flex-wrap justify-content-center">
+                            <!-- Botones de filtro se cargan aquí dinámicamente -->
+                        </div>
+                    </div>
+
+                    <!-- Grid de Galería -->
+                    <div id="galleryGrid" class="gallery-grid">
+                        <p class="no-photos">Cargando galería...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer section-padding">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-3 col-12 mb-4 pb-2">
+                        <a class="navbar-brand mb-2" href="index.html">
+                            <i class="bi-atom"></i>
+                            <span>AEFN</span>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-6">
+                        <h6 class="site-footer-title mb-3">Enlaces Rápidos</h6>
+
+                        <ul class="site-footer-links">
+                            <li class="site-footer-link-item">
+                                <a href="#section_1" class="site-footer-link">Inicio</a>
+                            </li>
+
+                            <li class="site-footer-link-item">
+                                <a href="#section_2" class="site-footer-link">Nosotros</a>
+                            </li>
+
+                            <li class="site-footer-link-item">
+                                <a href="#section_5" class="site-footer-link">Calendario</a>
+                            </li>
+
+                            <li class="site-footer-link-item">
+                                <a href="#material" class="site-footer-link">Recursos</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-6 mb-4 mb-lg-0">
+                        <h6 class="site-footer-title mb-3">Contacto</h6>
+
+                        <p class="text-white d-flex">
+                            <a href="mailto:decanatoecfn@yachaytech.edu.ec" class="site-footer-link">
+                                decanatoecfn@yachaytech.edu.ec
+                            </a>
+                        </p>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-12 mt-4 mt-lg-0 ms-auto">
+                        <h6 class="site-footer-title mb-3">Redes</h6>
+                        <ul class="social-icon">
+                            <li class="social-icon-item">
+                                <a href="https://www.instagram.com/aefn_yt/" class="social-icon-link bi-instagram" target="_blank" rel="noopener noreferrer"></a>
+                            </li>
+                        </ul>
+
+                        <p class="copyright-text mt-lg-4 mt-3">Copyright © 2025 AEFN - Asociación de Estudiantes de Física y Nanotecnología.
+                        <br><br>Todos los derechos reservados.</p>
+                    </div>
+
+                </div>
+            </div>
+        </footer>
+
+        <!-- Lightbox Modal -->
+        <div id="lightbox" class="lightbox">
+            <span class="lightbox-close" onclick="closeLightbox()">×</span>
+            <div class="lightbox-content">
+                <div style="display: flex; gap: 30px; align-items: flex-start; width: 100%; max-width: 1200px;">
+                    <!-- Imagen -->
+                    <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                        <img id="lightboxImage" class="lightbox-image" src="" alt="">
+                    </div>
+                    
+                    <!-- Panel de Descripción -->
+                    <div style="flex: 0 0 350px; max-height: 85vh; overflow-y: auto; color: white;">
+                        <h4 id="lightboxTitle" style="margin-bottom: 15px; color: #667eea; font-weight: 600; font-size: 1.4rem;">Título</h4>
+                        <hr style="border-color: rgba(102, 126, 234, 0.3); margin-bottom: 20px;">
+                        <p id="lightboxDescription" style="margin-bottom: 20px; line-height: 1.8; font-size: 0.95rem; color: #ddd;">Descripción</p>
+                        <p id="lightboxCounter" style="color: #888; font-size: 0.85rem; position: absolute; bottom: 20px; left: 20px;">1/1</p>
+                    </div>
+                </div>
+                
+                <span class="lightbox-nav lightbox-prev" onclick="prevImage()">❮</span>
+                <span class="lightbox-nav lightbox-next" onclick="nextImage()">❯</span>
+            </div>
+        </div>
+
+        <!-- JAVASCRIPT FILES -->
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/permissions.js"></script>
+        <script src="js/jquery.sticky.js"></script>
+        <script src="js/click-scroll.js"></script>
+        <script src="js/custom.js"></script>
+        <script src="js/gallery.js"></script>
+        <script>
+            // Inicializar galería cuando la página carga
+            document.addEventListener('DOMContentLoaded', function() {
+                Gallery.init();
+                // Nota: El botón de agregar galería se puede agregar si es necesario
+            });
+        </script>
+    </body>
+</html>

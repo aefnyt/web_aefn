@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Quantum Efficiency in Organic Photovoltaics",
+    "authors": ["Duncan Mowbray"],
+    "year": 2025,
+    "abstract": "A computational framework to estimate external quantum efficiencies.",
+    "link": "",
+    "published": true
+  },
+  {
+    "title": "Magnetic Nanorobots for Microplastics Remediation",
+    "authors": ["Sara Briceño"],
+    "year": 2025,
+    "abstract": "Prototype design and in-vitro testing of magnetically actuated nanorobots.",
+    "link": "",
+    "published": false
+  }
+]

@@ -1,0 +1,169 @@
+:root {
+    --primary-color: #003366;      /* Azul oscuro institucional */
+    --secondary-color: #FFD700;    /* Dorado para acentos */
+    --tertiary-color: #004d99;     /* Azul medio para hover */
+    --light-color: #e6f3ff;        /* Azul claro para fondos */
+    --dark-color: #001f3f;         /* Azul muy oscuro para textos */
+    --accent-color: #ffa500;       /* Naranja para call-to-action */
+    --success-color: #28a745;      /* Verde para éxito */
+    --info-color: #17a2b8;         /* Azul info para notas */
+    --warning-color: #ffc107;      /* Amarillo para advertencias */
+    --danger-color: #dc3545;       /* Rojo para errores */
+    --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--tertiary-color));
+    --gradient-dark: linear-gradient(135deg, var(--dark-color), var(--primary-color));
+}
+
+/* Estilos generales */
+.custom-btn {
+    background: var(--gradient-primary);
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.custom-btn:hover {
+    background: var(--gradient-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.custom-border-btn {
+    background: transparent;
+    border: 2px solid var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.custom-border-btn:hover {
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+/* Navegación */
+.navbar {
+    background: var(--gradient-primary);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand span {
+    color: var(--secondary-color);
+    font-weight: 700;
+}
+
+.navbar .nav-link {
+    color: white !important;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.navbar .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--secondary-color);
+    transition: all 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: var(--secondary-color) !important;
+}
+
+.navbar .nav-link:hover::after {
+    width: 100%;
+}
+
+/* Hero Section */
+.hero-section {
+    background: var(--gradient-primary);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('path-to-your-pattern.png');
+    opacity: 0.1;
+    animation: backgroundMove 20s linear infinite;
+}
+
+@keyframes backgroundMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 100% 100%; }
+}
+
+/* Secciones */
+.section-padding {
+    background-color: var(--light-color);
+    position: relative;
+}
+
+.section-padding::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+}
+
+.custom-block {
+    border-left: 4px solid var(--secondary-color);
+    transition: all 0.3s ease;
+    background: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.custom-block:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* Tabs */
+.nav-tabs .nav-link {
+    color: var(--primary-color);
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--dark-color);
+    border-bottom: 3px solid var(--secondary-color);
+}
+
+/* Cards y bloques */
+.custom-block-overlay {
+    background: linear-gradient(rgba(0, 51, 102, 0.9), rgba(0, 77, 153, 0.9));
+}
+
+/* Footer */
+.site-footer {
+    background: var(--dark-color);
+}
+
+.site-footer-title {
+    color: var(--secondary-color);
+}
+
+/* Badges */
+.badge {
+    background-color: var(--accent-color) !important;
+}
+
+/* Timeline */
+.timeline-container {
+    border-left-color: var(--secondary-color);
+}
+
+.timeline-container .icon-holder {
+    background: var(--primary-color);
+    border: 3px solid var(--secondary-color);
+}

@@ -1,0 +1,318 @@
+/* Override de colores para elementos específicos */
+.section-overlay {
+    background: linear-gradient(135deg, rgba(0,31,63,0.95), rgba(0,13,26,0.95)) !important;
+}
+
+.how-it-works-section {
+    background: linear-gradient(135deg, #001f3f, #000d1a) !important;
+}
+
+/* Forzar esquema dorado/negro para elementos 'finance' (remueve el azul) */
+/* Esto sobrescribe cualquier color azul definido en la plantilla para la clase .bg-finance */
+.bg-finance,
+.badge.bg-finance,
+.custom-block .badge.bg-finance,
+.custom-block-overlay .badge.bg-finance {
+    background-color: var(--secondary-color) !important;
+    color: var(--dark-color) !important;
+    border-color: var(--secondary-color) !important;
+}
+
+/* Cambiar fondo de los bloques overlay (por ejemplo la tarjeta "Finance")
+   para mantener el esquema dorado/negro en toda la página */
+.custom-block-overlay {
+    background: linear-gradient(135deg, rgba(255,215,0,0.95), rgba(26,26,26,0.95)) !important;
+    border-left-color: var(--secondary-color) !important;
+}
+
+/* Asegurar que el texto superpuesto use contraste negro/dorado */
+.custom-block-overlay-text {
+    background: linear-gradient(135deg, rgba(0,0,0,0.55), rgba(0,0,0,0.55)) !important;
+}
+
+/* Evitar que imágenes o filtros añadan tono azulado sobre el overlay */
+.custom-block-overlay img,
+.custom-block-overlay .custom-block-image {
+    filter: none !important;
+}
+
+
+/* Actualización de elementos de navegación y encabezados */
+.navbar-nav .nav-link {
+    color: var(--secondary-color) !important;
+}
+
+/* Add bottom padding to navbar to avoid overlapping following content (logo) */
+.navbar {
+    padding-bottom: 18px;
+}
+
+/* Center navbar items on large screens and hide any leftover profile icon anchors */
+@media (min-width: 992px) {
+    .navbar .navbar-collapse {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .navbar .navbar-nav {
+        margin: 0 auto;
+    }
+}
+
+.navbar-icon {
+    display: none !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #fff !important;
+    text-shadow: 0 0 10px var(--secondary-color);
+}
+
+.dropdown-menu {
+    background: var(--dark-color) !important;
+    border: 1px solid var(--secondary-color) !important;
+}
+
+.dropdown-item {
+    color: var(--secondary-color) !important;
+}
+
+.dropdown-item:hover {
+    background: var(--primary-color) !important;
+    color: #fff !important;
+}
+
+/* Actualización de tarjetas y contenedores */
+.custom-block-overlay {
+    background: linear-gradient(135deg, rgba(0,31,63,0.95), rgba(0,51,102,0.95)) !important;
+}
+
+.custom-block-overlay-text {
+    background: linear-gradient(135deg, rgba(0,31,63,0.9), rgba(0,51,102,0.9)) !important;
+}
+
+/* Elementos de contacto y footer */
+.contact-section {
+    background: linear-gradient(135deg, var(--primary-color), var(--dark-color)) !important;
+}
+
+.site-footer {
+    background: var(--dark-color) !important;
+    border-top: 4px solid var(--secondary-color);
+}
+
+/* Botones y elementos interactivos */
+.btn-secondary {
+    background: var(--gradient-primary) !important;
+    border: 1px solid var(--secondary-color) !important;
+}
+
+.btn-secondary:hover {
+    background: var(--gradient-dark) !important;
+    box-shadow: 0 0 15px rgba(255,215,0,0.3);
+}
+
+/* Sección "How does it work?" */
+.timeline-section {
+    background: linear-gradient(135deg, var(--dark-color), var(--primary-color)) !important;
+}
+
+.timeline-container .icon-holder {
+    background: var(--gradient-primary) !important;
+    border: 3px solid var(--secondary-color) !important;
+    box-shadow: 0 0 15px rgba(255,215,0,0.2);
+}
+
+/* FAQ Section */
+.faq-section {
+    background: var(--light-color) !important;
+}
+
+.accordion-button {
+    background: white !important;
+    color: var(--primary-color) !important;
+}
+
+.accordion-button:not(.collapsed) {
+    background: var(--gradient-primary) !important;
+    color: var(--secondary-color) !important;
+}
+
+/* Get in touch section */
+.google-map {
+    border: 3px solid var(--secondary-color) !important;
+    border-radius: 10px;
+}
+
+/* Badges y etiquetas */
+.badge {
+    background: var(--gradient-primary) !important;
+    color: var(--secondary-color) !important;
+}
+
+/* Social icons */
+.social-icon-link {
+    background: var(--secondary-color) !important;
+    color: var(--dark-color) !important;
+}
+
+.social-icon-link:hover {
+    background: var(--dark-color) !important;
+    color: var(--secondary-color) !important;
+}
+
+/* Enlaces y texto */
+.site-footer-link {
+    color: var(--secondary-color) !important;
+    transition: all 0.3s ease;
+}
+
+.site-footer-link:hover {
+    color: #fff !important;
+    text-shadow: 0 0 10px var(--secondary-color);
+}
+
+/* Efectos de hover mejorados */
+.custom-btn:hover,
+.custom-border-btn:hover,
+.nav-link:hover,
+.social-icon-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255,215,0,0.2);
+}
+
+/* Override para el tema oscuro en dropdowns */
+.dropdown-menu-light {
+    background-color: var(--dark-color) !important;
+    border-color: var(--secondary-color) !important;
+}
+
+.dropdown-menu-light .dropdown-item {
+    color: var(--secondary-color) !important;
+}
+
+.dropdown-menu-light .dropdown-item:hover {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+}
+
+/* Improved hover for 'Recursos' nav trigger: mix subtle background, color change, scale and shadow */
+.nav-link.dropdown-toggle {
+    transition: background-color .15s ease, color .15s ease, transform .12s ease, box-shadow .12s ease;
+    border-radius: 6px;
+}
+.nav-link.dropdown-toggle:hover,
+.nav-link.dropdown-toggle:focus {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(13,110,253,0.18);
+    text-decoration: none;
+}
+
+/* Ensure dropdown caret and link color remain visible when toggled */
+.nav-link.dropdown-toggle[aria-expanded="true"] {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+}
+
+/* Apply the same improved hover behavior to all primary nav links for consistency */
+.navbar-nav .nav-link {
+    transition: background-color .15s ease, color .15s ease, transform .12s ease, box-shadow .12s ease;
+    border-radius: 6px;
+}
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(13,110,253,0.18);
+    text-decoration: none;
+}
+
+/* Keep active nav item visually consistent */
+.navbar-nav .nav-link.active {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+}
+
+/* Hero carousel styles */
+.hero-carousel-image {
+    height: 78vh; /* adjusted height per request */
+    object-fit: cover;
+    object-position: center center;
+}
+
+
+.hero-logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 18px;
+    padding-bottom: 14px;
+}
+
+.hero-logo {
+    max-height: 180px; /* larger so logo is clearly visible */
+    width: auto;
+    display: inline-block;
+    margin-top: 12px; /* additional small gap under the navbar */
+}
+
+@media (max-width: 991px) {
+    .hero-logo-section { padding-top: 18px; }
+}
+
+@media (max-width: 767px) {
+    .hero-carousel-image { height: 50vh; }
+    .hero-logo { max-height: 110px; }
+}
+
+/* Malla image styling */
+.malla-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+/* Lightbox styles */
+.lightbox-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 20000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+.lightbox-overlay.active { display: flex; }
+.lightbox-inner { max-width: 100%; max-height: 100%; }
+.lightbox-img { max-width: 100%; max-height: 90vh; border-radius: 6px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+.lightbox-close {
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 34px;
+    line-height: 1;
+    cursor: pointer;
+}
+.lightbox-close:focus { outline: 2px solid rgba(255,255,255,0.2); }
+
+@media (prefers-reduced-motion: reduce) {
+    .carousel { scroll-behavior: auto; }
+    .carousel-inner { transition: none !important; }
+}
+
+/* Remove the decorative top bar under the logo for the explore section */
+.explore-section.section-padding::before {
+    display: none !important;
+    height: 0 !important;
+}
+
+/* Investigation pages: ensure blue palette (use site defaults) */
+/* Investigation pages will use the site's default palette (inherit CSS variables from root). */

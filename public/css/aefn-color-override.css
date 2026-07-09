@@ -1,0 +1,138 @@
+/* Sobrescribir todos los colores azules del sistema */
+:root {
+    /* Sobrescribir variables de Bootstrap */
+    --bs-blue: var(--primary-color) !important;
+    --bs-primary: var(--primary-color) !important;
+    --bs-primary-rgb: 0,51,102 !important;
+    --bs-info: var(--secondary-color) !important;
+    --bs-info-rgb: 255,215,0 !important;
+    
+    /* Nuestras variables personalizadas */
+    --primary-color: #1a1a1a !important;      /* Negro suave para el fondo principal */
+    --secondary-color: #FFD700 !important;    /* Dorado para acentos */
+    --tertiary-color: #333333 !important;     /* Gris oscuro para hover */
+    --light-color: #f5f5f5 !important;        /* Gris muy claro para fondos */
+    --dark-color: #000000 !important;         /* Negro puro para textos */
+    --accent-color: #ffa500 !important;       /* Naranja para call-to-action */
+}
+
+/* Sobrescribir colores de fondo */
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.bg-info {
+    background-color: var(--secondary-color) !important;
+}
+
+/* Sobrescribir colores de texto */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-info {
+    color: var(--secondary-color) !important;
+}
+
+/* Sobrescribir colores de borde */
+.border-primary {
+    border-color: var(--primary-color) !important;
+}
+
+.border-info {
+    border-color: var(--secondary-color) !important;
+}
+
+/* Sobrescribir gradientes */
+.bg-gradient {
+    background: linear-gradient(135deg, var(--primary-color), var(--tertiary-color)) !important;
+}
+
+/* Sobrescribir colores de botones */
+.btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.btn-info {
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+    color: var(--dark-color) !important;
+}
+
+/* Sobrescribir colores de alertas */
+.alert-primary {
+    background-color: var(--light-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.alert-info {
+    background-color: var(--light-color) !important;
+    border-color: var(--secondary-color) !important;
+    color: var(--dark-color) !important;
+}
+
+/* Sobrescribir colores de tablas */
+.table-primary {
+    --bs-table-bg: var(--light-color) !important;
+    --bs-table-border-color: var(--primary-color) !important;
+}
+
+/* Sobrescribir colores específicos del tema */
+.custom-block {
+    background: var(--light-color) !important;
+}
+
+.custom-block-overlay {
+    background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(26,26,26,0.9)) !important;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color), var(--tertiary-color)) !important;
+}
+
+.navbar {
+    background: var(--dark-color) !important;
+}
+
+.timeline-section {
+    background: linear-gradient(135deg, var(--dark-color), var(--primary-color)) !important;
+}
+
+/* Sobrescribir colores de badges */
+.badge-design,
+.badge-marketing,
+.badge-finance,
+.badge-music,
+.badge-education {
+    background-color: var(--secondary-color) !important;
+    color: var(--dark-color) !important;
+}
+
+/* Sobrescribir efectos hover */
+.nav-link:hover,
+.navbar-nav .nav-link:hover,
+.site-footer-link:hover {
+    color: var(--secondary-color) !important;
+}
+
+/* Sobrescribir colores de formularios */
+.form-control:focus {
+    border-color: var(--secondary-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(255,215,0,0.25) !important;
+}
+
+/* Sobrescribir colores de íconos */
+.bi {
+    color: var(--secondary-color) !important;
+}
+
+/* Sobrescribir colores de enlaces */
+a {
+    color: var(--secondary-color) !important;
+}
+
+a:hover {
+    color: var(--accent-color) !important;
+}
