@@ -88,13 +88,17 @@ export async function POST(request: NextRequest) {
     const profesor = lista[index];
     const fotoAnterior = profesor.foto;
 
-    // 6. Generar nombre de archivo: images/profesores/{id}.webp
+    // 6. Generar nombre de archivo: {id}.webp
     const nuevoNombreArchivo = `${slugify(id) || `profesor-${Date.now()}`}.webp`;
-    const nuevaRuta = `${IMAGES_PATH}/${nuevoNombreArchivo}`;
+    // Ruta completa en el repo (con public/): public/images/profesores/andrey.webp
+    const nuevaRutaRepo = `${IMAGES_PATH}/${nuevoNombreArchivo}`;
+    // Ruta pública (sin public/): images/profesores/andrey.webp
+    // Esta es la que se guarda en el JSON y se usa en el frontend
+    const nuevaRutaPublica = nuevaRutaRepo.replace(/^public\//, "");
 
     // 7. Subir la nueva imagen a GitHub
     const uploadResult = await writeBinaryFile(
-      nuevaRuta,
+      nuevaRutaRepo,
       optimizedBuffer,
       `Upload photo: ${profesor.nombre}`
     );
@@ -103,8 +107,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: uploadResult.message }, { status: 500 });
     }
 
-    // 8. Actualizar el campo "foto" en el JSON
-    profesor.foto = nuevaRuta;
+    // 8. Actualizar el campo "foto" en el JSON (con la ruta pública)
+    profesor.foto = nuevaRutaPublica;
     lista[index] = profesor;
 
     const updateResult = await writeJsonFile(
@@ -119,13 +123,18 @@ export async function POST(request: NextRequest) {
     }
 
     // 9. Eliminar la foto anterior del repo (si existía y es diferente)
-    if (fotoAnterior && fotoAnterior !== nuevaRuta) {
-      await deleteFile(fotoAnterior, `Delete old photo: ${fotoAnterior}`);
+    if (fotoAnterior && fotoAnterior !== nuevaRutaPublica) {
+      // La foto anterior está guardada como ruta pública (sin public/)
+      // Necesitamos añadir public/ para eliminarla del repo
+      const rutaRepoAnterior = fotoAnterior.startsWith("public/")
+        ? fotoAnterior
+        : `public/${fotoAnterior}`;
+      await deleteFile(rutaRepoAnterior, `Delete old photo: ${fotoAnterior}`);
     }
 
     return NextResponse.json({
       success: true,
-      foto: nuevaRuta,
+      foto: nuevaRutaPublica,
       commitSha: updateResult.commitSha,
       message: `Foto de "${profesor.nombre}" actualizada correctamente.`,
     });
@@ -183,9 +192,15 @@ export async function DELETE(request: NextRequest) {
       });
     }
 
+    // La foto está guardada como ruta pública (sin public/)
+    // Necesitamos añadir public/ para eliminarla del repo
+    const rutaRepoAEliminar = fotoAEliminar.startsWith("public/")
+      ? fotoAEliminar
+      : `public/${fotoAEliminar}`;
+
     // 1. Eliminar el archivo de imagen del repo
     const deleteResult = await deleteFile(
-      fotoAEliminar,
+      rutaRepoAEliminar,
       `Delete photo: ${profesor.nombre}`
     );
 

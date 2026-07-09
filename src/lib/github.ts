@@ -278,11 +278,16 @@ async function readLocalJsonFile<T>(path: string): Promise<{ data: T | null; sha
   const fs = await import("fs/promises");
   const pathModule = await import("path");
 
+  // Normalizar el path: si ya empieza con "public/", no duplicar
+  const cleanPath = path.replace(/^public\//, "");
+
   // Múltiples rutas posibles (Vercel standalone puede tener diferentes estructuras)
   const possiblePaths = [
-    `${process.cwd()}/public/${path}`,
-    `${process.cwd()}/./public/${path}`,
-    pathModule.join(process.cwd(), "public", path),
+    `${process.cwd()}/public/${cleanPath}`,
+    `${process.cwd()}/./public/${cleanPath}`,
+    pathModule.join(process.cwd(), "public", cleanPath),
+    // También probar con el path tal como viene (por si incluye public/)
+    `${process.cwd()}/${path}`,
   ];
 
   for (const localPath of possiblePaths) {
@@ -314,7 +319,9 @@ async function readStaticJsonFile<T>(path: string): Promise<{ data: T | null; sh
       baseUrl = "http://localhost:3000";
     }
 
-    const url = `${baseUrl}/${path}`;
+    // Vercel sirve public/ en la raíz, así que quitar "public/" del path
+    const cleanPath = path.replace(/^public\//, "");
+    const url = `${baseUrl}/${cleanPath}`;
     const response = await fetch(url);
 
     if (!response.ok) {

@@ -73,13 +73,16 @@ export async function POST(request: NextRequest) {
     const noticia = lista[index];
     const imagenAnterior = noticia.imagen;
 
-    // Generar nombre de archivo: images/noticias/{id}.webp
+    // Generar nombre de archivo: {id}.webp
     const nuevoNombreArchivo = `${slugify(id) || `noticia-${Date.now()}`}.webp`;
-    const nuevaRuta = `${IMAGES_PATH}/${nuevoNombreArchivo}`;
+    // Ruta completa en el repo (con public/): public/images/noticias/x.webp
+    const nuevaRutaRepo = `${IMAGES_PATH}/${nuevoNombreArchivo}`;
+    // Ruta pública (sin public/): images/noticias/x.webp
+    const nuevaRutaPublica = nuevaRutaRepo.replace(/^public\//, "");
 
     // Subir la nueva imagen
     const uploadResult = await writeBinaryFile(
-      nuevaRuta,
+      nuevaRutaRepo,
       optimizedBuffer,
       `Upload news image: ${noticia.titulo}`
     );
@@ -88,8 +91,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: uploadResult.message }, { status: 500 });
     }
 
-    // Actualizar el campo "imagen" en el JSON
-    noticia.imagen = nuevaRuta;
+    // Actualizar el campo "imagen" en el JSON (con ruta pública)
+    noticia.imagen = nuevaRutaPublica;
     lista[index] = noticia;
 
     const updateResult = await writeJsonFile(
@@ -104,13 +107,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Eliminar la imagen anterior si existía y es diferente
-    if (imagenAnterior && imagenAnterior !== nuevaRuta) {
-      await deleteFile(imagenAnterior, `Delete old news image: ${imagenAnterior}`);
+    if (imagenAnterior && imagenAnterior !== nuevaRutaPublica) {
+      const rutaRepoAnterior = imagenAnterior.startsWith("public/")
+        ? imagenAnterior
+        : `public/${imagenAnterior}`;
+      await deleteFile(rutaRepoAnterior, `Delete old news image: ${imagenAnterior}`);
     }
 
     return NextResponse.json({
       success: true,
-      imagen: nuevaRuta,
+      imagen: nuevaRutaPublica,
       commitSha: updateResult.commitSha,
       message: `Imagen de "${noticia.titulo}" actualizada correctamente.`,
     });
@@ -168,8 +174,11 @@ export async function DELETE(request: NextRequest) {
       });
     }
 
-    // Eliminar el archivo
-    await deleteFile(imagenAEliminar, `Delete news image: ${noticia.titulo}`);
+    // Eliminar el archivo (añadir public/ si no lo tiene)
+    const rutaRepoAEliminar = imagenAEliminar.startsWith("public/")
+      ? imagenAEliminar
+      : `public/${imagenAEliminar}`;
+    await deleteFile(rutaRepoAEliminar, `Delete news image: ${noticia.titulo}`);
 
     // Actualizar el JSON
     noticia.imagen = undefined;
