@@ -68,7 +68,7 @@ export function AdminDashboard() {
             </div>
 
             <div className="flex items-center gap-2">
-              <Link href="/index.html" target="_blank">
+              <Link href="/" target="_blank">
                 <Button variant="ghost" size="sm" className="text-amber-400/80 hover:text-amber-400 hover:bg-white/5">
                   <ExternalLink className="w-4 h-4 mr-1" />
                   Ver sitio
