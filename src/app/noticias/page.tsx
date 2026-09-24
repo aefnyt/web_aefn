@@ -80,7 +80,7 @@ export default async function NoticiasPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Link
-                href="/index.html"
+                href="/"
                 className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors"
               >
                 <div className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-slate-900 text-white">
@@ -95,7 +95,7 @@ export default async function NoticiasPage() {
               </h1>
             </div>
             <Link
-              href="/index.html"
+              href="/"
               className="text-sm text-slate-500 hover:text-slate-700 hidden sm:block"
             >
               ← Volver al inicio
