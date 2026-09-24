@@ -69,7 +69,7 @@ export default function CreditosPage() {
       <header className="bg-neutral-950 border-b border-amber-500/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link
-            href="/index.html"
+            href="/"
             className="inline-flex items-center gap-3 text-white hover:text-amber-400 transition-colors"
           >
             <div className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/5 border border-amber-500/30 overflow-hidden">
@@ -82,7 +82,7 @@ export default function CreditosPage() {
             <span className="font-semibold text-sm">AEFN</span>
           </Link>
           <Link
-            href="/index.html"
+            href="/"
             className="text-sm text-amber-400/70 hover:text-amber-400 flex items-center gap-1"
           >
             <ArrowLeft className="w-4 h-4" />
